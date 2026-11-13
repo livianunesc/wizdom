@@ -1,0 +1,14 @@
+WIZDOM - COMO ABRIR
+
+1. Extraia o ZIP para uma pasta no computador.
+2. Abra o arquivo index.html da pasta principal com Chrome ou Edge.
+3. No Windows, voce tambem pode clicar duas vezes em ABRIR-WIZDOM.bat.
+
+Pronto! Nao precisa instalar Node.js nem executar comandos no terminal.
+O site ja esta preparado no index.html, incluindo fontes e icones.
+Os links dos portais oficiais das universidades precisam de internet.
+
+Use o mesmo navegador e mantenha o arquivo na mesma pasta para continuar
+com os dados salvos localmente. Cadastro e login sao demonstrativos.
+
+Para editar o codigo e reconstruir o site, veja README.md.

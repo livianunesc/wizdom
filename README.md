@@ -4,23 +4,41 @@
 
 ![Dashboard da WIZDOM](docs/dashboard.png)
 
-## Executar
+## Abrir o site com dois cliques
 
-Requer Node.js 20.19+ ou 22.12+ (validado com **24.22.1**) e npm.
+1. Baixe a versão atual em **Code → Download ZIP** no GitHub.
+2. Extraia o ZIP para uma pasta no computador.
+3. Abra o **`index.html` da pasta principal** com Chrome ou Edge. No Windows, também pode dar dois cliques em **`ABRIR-WIZDOM.bat`**.
+
+**Para usar o protótipo, não precisa instalar Node.js, rodar npm ou abrir um terminal.** O `index.html` já inclui código, estilos, fontes e ícones e pode ser aberto sem internet. Os links para portais oficiais das universidades precisam de conexão.
+
+Mantenha o arquivo na mesma pasta e use o mesmo navegador para continuar com os dados locais. O navegador pode separar dados por endereço do arquivo. Não há sincronização com outros computadores.
+
+## Desenvolvimento (opcional)
+
+Só quem vai editar e reconstruir o código precisa de Node.js 20.19+ ou 22.12+ (validado com **24.22.1**) e npm.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Para gerar e servir a versão de produção:
+No **PowerShell do Windows**, use `npm.cmd` para evitar o bloqueio do `npm.ps1`, sem alterar a política de execução do computador:
+
+```powershell
+npm.cmd ci
+npm.cmd run dev
+```
+
+Depois de editar os arquivos em `src/`, atualize a versão que abre com dois cliques:
 
 ```sh
 npm run build
-npm run preview
 ```
 
-Não exige chaves, banco de dados ou serviços externos. Fontes e ícones são servidos localmente.
+O build gera um HTML independente em `dist/index.html` e atualiza o `index.html` da pasta principal. Inclua o arquivo atualizado no commit. O ponto de entrada de desenvolvimento fica em `web/index.html`; não edite o HTML gerado manualmente. `npm run preview` também pode servir o build para desenvolvimento, quando necessário.
+
+Não exige chaves, banco de dados ou serviços externos.
 
 ## Experimentar
 
@@ -41,9 +59,12 @@ Os dados de cada conta são separados dos dados da demonstração e persistem ne
 npm test          # regras de planejamento e isolamento de estado
 npm run test:e2e # inicia servidor isolado e testa os fluxos em Chromium
 npm run build
+npm run test:standalone # valida o HTML pronto, sem Vite nem dependências em tempo de uso
 ```
 
 O teste E2E usa `/usr/bin/chromium` por padrão. Em outra máquina, defina `CHROMIUM_PATH` com o executável instalado. É possível fornecer `BASE_URL` para testar um servidor existente, ou `WIZDOM_TEST_PORT` para trocar a porta do servidor isolado (padrão: 5175). Os contextos de teste são descartáveis e não alteram seus dados de demonstração.
+
+O teste standalone tenta abrir o HTML diretamente com `file://`. Se o navegador gerenciado bloquear esse protocolo por política administrativa, o teste informa que essa abertura não foi validada e executa os mesmos fluxos sobre os bytes do HTML, servidos isoladamente em uma origem local. Nenhuma política ou segurança do navegador é desativada. Esse servidor só existe durante o teste; o usuário abre o arquivo diretamente no computador.
 
 Os testes de foco usam o relógio virtual do Playwright para verificar 30 minutos de estudo e pausas sem aguardar esse tempo real.
 
@@ -59,6 +80,10 @@ Os testes de foco usam o relógio virtual do Playwright para verificar 30 minuto
 
 ## Estrutura
 
+- `index.html`: versão pronta e independente para abrir no navegador.
+- `ABRIR-WIZDOM.bat`: atalho de abertura para Windows, sem npm ou PowerShell.
+- `web/index.html`: ponto de entrada do Vite durante o desenvolvimento.
+- `scripts/build.mjs`: gera e verifica o HTML independente.
 - `src/App.jsx`: navegação, estado local por conta e integração das páginas.
 - `src/lib.js`: planejamento, perfil inicial e derivação de senha de demonstração.
 - `src/Auth.jsx`, `src/Onboarding.jsx`: acesso e personalização inicial.
